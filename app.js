@@ -13,6 +13,13 @@ function reset() {
     document.getElementById("square" + index).textContent = "";
     document.getElementById("square" + index).classList.remove("cross");
   }
+
+  document.getElementById("bingoLabel1").classList.remove("cross");
+  document.getElementById("bingoLabel2").classList.remove("cross");
+  document.getElementById("bingoLabel3").classList.remove("cross");
+  document.getElementById("bingoLabel4").classList.remove("cross");
+  document.getElementById("bingoLabel5").classList.remove("cross");
+
 }
 
 window.addEventListener("click", evt => {
@@ -93,26 +100,26 @@ function checkBingoAlgorithm() {
   if(count == 1){
     document.getElementById("bingoLabel1").classList.add("cross");
   }
-  else if(count == 2){
+  if(count == 2){
     document.getElementById("bingoLabel1").classList.add("cross");
     document.getElementById("bingoLabel2").classList.add("cross");
   }
-  else if(count == 3){
+  if(count == 3){
     document.getElementById("bingoLabel1").classList.add("cross");
     document.getElementById("bingoLabel2").classList.add("cross");
     document.getElementById("bingoLabel3").classList.add("cross");
   }
-  else if(count == 4){
+  if(count == 4){
     document.getElementById("bingoLabel1").classList.add("cross");
     document.getElementById("bingoLabel2").classList.add("cross");
     document.getElementById("bingoLabel3").classList.add("cross");
     document.getElementById("bingoLabel4").classList.add("cross");
   }
-  else if(count == 5){
-    document.getElementById("bingoLabel5").classList.add("cross");
-    document.getElementById("bingoLabel5").classList.add("cross");
-    document.getElementById("bingoLabel5").classList.add("cross");
-    document.getElementById("bingoLabel5").classList.add("cross");
+  if(count >= 5){
+    document.getElementById("bingoLabel1").classList.add("cross");
+    document.getElementById("bingoLabel2").classList.add("cross");
+    document.getElementById("bingoLabel3").classList.add("cross");
+    document.getElementById("bingoLabel4").classList.add("cross");
     document.getElementById("bingoLabel5").classList.add("cross");
   }
 }
