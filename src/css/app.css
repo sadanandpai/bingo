@@ -1,0 +1,27 @@
+*{
+  box-sizing: border-box;
+  margin: 0px;
+}
+body, html {
+  margin: auto;
+  font-family: Arial, sans-serif;
+  width: 100%;
+  padding: 0px;
+}
+
+body{
+  text-align: center;
+}
+
+.box{
+  height: 50px;
+  width: 50px;
+  border: 1px solid black;
+  margin: 1px 1px;
+  padding-top: 15px;
+}
+
+.inline-block{
+  display: inline-block;
+  vertical-align: middle;
+}
