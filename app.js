@@ -1,4 +1,4 @@
-navigator.serviceWorker.register("../../sw.js");
+navigator.serviceWorker.register("./sw.js");
 
 userTurn = "X";
 var winner = "";
