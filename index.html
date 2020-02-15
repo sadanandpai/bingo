@@ -7,26 +7,39 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Progressive Web Apps</title>
+    <title>Bingo by Pai</title>
     <link rel="stylesheet" href="./app.css" />
     <link rel="manifest" href="./manifest.json" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="Weather PWA" />
+    <meta name="apple-mobile-web-app-title" content="Bingo" />
     <link rel="apple-touch-icon" href="./icons/icon-152x152.png" />
-    <meta name="description" content="Tic Tac Toe" />
+    <meta name="description" content="Bingo" />
     <meta name="theme-color" content="#2F3BA2" />
   </head>
   <body>
+    <h1 style="margin: 10px;">Bingo !!!</h1>
     <div>
-      <div class="box inline-block" id="square0"></div><div class="box inline-block" id="square1"></div><div class="box inline-block" id="square2"></div>
+      <div class="box inline-block" id="square1"></div><div class="box inline-block" id="square2"></div><div class="box inline-block" id="square3"></div><div class="box inline-block" id="square4"></div><div class="box inline-block" id="square5"></div>
     </div>
     <div>
-      <div class="box inline-block" id="square3"></div><div class="box inline-block" id="square4"></div><div class="box inline-block" id="square5"></div>
+      <div class="box inline-block" id="square6"></div><div class="box inline-block" id="square7"></div><div class="box inline-block" id="square8"></div><div class="box inline-block" id="square9"></div><div class="box inline-block" id="square10"></div>
     </div>
     <div>
-      <div class="box inline-block" id="square6"></div><div class="box inline-block" id="square7"></div><div class="box inline-block" id="square8"></div>
+      <div class="box inline-block" id="square11"></div><div class="box inline-block" id="square12"></div><div class="box inline-block" id="square13"></div><div class="box inline-block" id="square14"></div><div class="box inline-block" id="square15"></div>
     </div>
+    <div>
+      <div class="box inline-block" id="square16"></div><div class="box inline-block" id="square17"></div><div class="box inline-block" id="square18"></div><div class="box inline-block" id="square19"></div><div class="box inline-block" id="square20"></div>
+    </div>
+    <div>
+      <div class="box inline-block" id="square21"></div><div class="box inline-block" id="square22"></div><div class="box inline-block" id="square23"></div><div class="box inline-block" id="square24"></div><div class="box inline-block" id="square25"></div>
+    </div>
+
+    <div style="margin: 10px;">
+      <button id="reset" onclick="reset()">Reset</button>
+      <button id="start" onclick="start()">Start</button>
+    </div>
+
     <script src="./app.js"></script>
   </body>
 </html>

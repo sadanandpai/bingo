@@ -25,3 +25,7 @@ body{
   display: inline-block;
   vertical-align: middle;
 }
+
+.cross{
+  background-color: lightgreen;
+}

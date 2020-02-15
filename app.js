@@ -1,56 +1,40 @@
 navigator.serviceWorker.register("./sw.js");
 
-userTurn = "X";
-var winner = "";
+var count = 1;
+var gameInProgress = false;
+document.getElementById("start").disabled = true;
+
+function reset() {
+  gameInProgress = false;
+  count = 1;
+  document.getElementById("start").disabled = true;
+
+  for (let index = 1; index < 26; index++) {
+    document.getElementById("square" + index).textContent = "";
+    document.getElementById("square" + index).classList.remove("cross");
+  }
+}
 
 window.addEventListener("click", evt => {
   if (
     evt.srcElement.className.includes("box") &&
-    evt.srcElement.textContent == "" &&
-    winner === ""
+    evt.srcElement.textContent == "" && !gameInProgress
   ) {
-    evt.srcElement.textContent = userTurn;
-    userTurn = userTurn == "X" ? "O" : "X";
+    evt.srcElement.textContent = count++;
+  }
 
-    checkWinnerAlgorithm();
+  if (
+    evt.srcElement.className.includes("box") && gameInProgress
+  ) {
+    evt.srcElement.classList.add("cross");
+  }
+
+  if(count == 26 & !gameInProgress){
+    document.getElementById("start").disabled = false;
   }
 });
 
-function checkWinnerAlgorithm() {
-  let code = "";
-  for (let i = 0; i < 9; i = i + 3) {
-    code = document.getElementById("square" + i).textContent;
-    if (
-      code !== '' && code === document.getElementById("square" + (i + 1)).textContent &&
-      code === document.getElementById("square" + (i + 2)).textContent
-    ) {
-      winner = code;
-    }
-  }
-
-  for (let i = 0; i < 3; i++) {
-    code = document.getElementById("square" + i).textContent;
-    if (
-      code !== '' && code === document.getElementById("square" + (i + 3)).textContent &&
-      code === document.getElementById("square" + (i + 6)).textContent
-    ) {
-      winner = code;
-    }
-  }
-
-  code = document.getElementById("square0").textContent;
-  if (
-    code !== '' && code === document.getElementById("square4").textContent &&
-    code === document.getElementById("square8").textContent
-  ) {
-    winner = code;
-  }
-
-  code = document.getElementById("square2").textContent;
-  if (
-    code !== '' && code === document.getElementById("square4").textContent &&
-    code === document.getElementById("square6").textContent
-  ) {
-    winner = code;
-  }
+function start(){
+  gameInProgress = true;
+  document.getElementById("start").disabled = true;
 }
