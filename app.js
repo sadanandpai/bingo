@@ -18,23 +18,101 @@ function reset() {
 window.addEventListener("click", evt => {
   if (
     evt.srcElement.className.includes("box") &&
-    evt.srcElement.textContent == "" && !gameInProgress
+    evt.srcElement.textContent == "" &&
+    !gameInProgress
   ) {
     evt.srcElement.textContent = count++;
   }
 
-  if (
-    evt.srcElement.className.includes("box") && gameInProgress
-  ) {
+  if (evt.srcElement.className.includes("box") && gameInProgress) {
     evt.srcElement.classList.add("cross");
+    checkBingoAlgorithm();
   }
 
-  if(count == 26 & !gameInProgress){
+  if ((count == 26) & !gameInProgress) {
     document.getElementById("start").disabled = false;
   }
 });
 
-function start(){
+function start() {
   gameInProgress = true;
   document.getElementById("start").disabled = true;
+}
+
+function checkBingoAlgorithm() {
+  var count = 0;
+
+  for (let i = 1; i < 26; i = i + 5) {
+    if (
+      document.getElementById("square" + i).classList.contains("cross") &&
+      document.getElementById("square" + (i + 1)).classList.contains("cross") &&
+      document.getElementById("square" + (i + 2)).classList.contains("cross") &&
+      document.getElementById("square" + (i + 3)).classList.contains("cross") &&
+      document.getElementById("square" + (i + 4)).classList.contains("cross")
+    ) {
+      count++;
+    }
+  }
+
+  for (let i = 1; i < 6; i++) {
+    if (
+      document.getElementById("square" + i).classList.contains("cross") &&
+      document.getElementById("square" + (i + 5)).classList.contains("cross") &&
+      document
+        .getElementById("square" + (i + 10))
+        .classList.contains("cross") &&
+      document
+        .getElementById("square" + (i + 15))
+        .classList.contains("cross") &&
+      document.getElementById("square" + (i + 20)).classList.contains("cross")
+    ) {
+      count++;
+    }
+  }
+
+  if (
+    document.getElementById("square1").classList.contains("cross") &&
+    document.getElementById("square7").classList.contains("cross") &&
+    document.getElementById("square13").classList.contains("cross") &&
+    document.getElementById("square19").classList.contains("cross") &&
+    document.getElementById("square25").classList.contains("cross")
+  ) {
+    count++;
+  }
+
+  if (
+    document.getElementById("square5").classList.contains("cross") &&
+    document.getElementById("square9").classList.contains("cross") &&
+    document.getElementById("square13").classList.contains("cross") &&
+    document.getElementById("square17").classList.contains("cross") &&
+    document.getElementById("square21").classList.contains("cross")
+  ) {
+    count++;
+  }
+
+  if(count == 1){
+    document.getElementById("bingoLabel1").classList.add("cross");
+  }
+  else if(count == 2){
+    document.getElementById("bingoLabel1").classList.add("cross");
+    document.getElementById("bingoLabel2").classList.add("cross");
+  }
+  else if(count == 3){
+    document.getElementById("bingoLabel1").classList.add("cross");
+    document.getElementById("bingoLabel2").classList.add("cross");
+    document.getElementById("bingoLabel3").classList.add("cross");
+  }
+  else if(count == 4){
+    document.getElementById("bingoLabel1").classList.add("cross");
+    document.getElementById("bingoLabel2").classList.add("cross");
+    document.getElementById("bingoLabel3").classList.add("cross");
+    document.getElementById("bingoLabel4").classList.add("cross");
+  }
+  else if(count == 5){
+    document.getElementById("bingoLabel5").classList.add("cross");
+    document.getElementById("bingoLabel5").classList.add("cross");
+    document.getElementById("bingoLabel5").classList.add("cross");
+    document.getElementById("bingoLabel5").classList.add("cross");
+    document.getElementById("bingoLabel5").classList.add("cross");
+  }
 }

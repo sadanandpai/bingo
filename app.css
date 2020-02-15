@@ -29,3 +29,10 @@ body{
 .cross{
   background-color: lightgreen;
 }
+
+.bingo-label{
+  margin: 0px 5px; 
+  height: 10xp; 
+  width: 40px; 
+  text-align: center;
+}
