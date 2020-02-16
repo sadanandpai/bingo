@@ -8,6 +8,7 @@ function reset() {
   gameInProgress = false;
   count = 1;
   document.getElementById("start").disabled = true;
+  document.getElementById("randomize").disabled = false;
 
   for (let index = 1; index < 26; index++) {
     document.getElementById("square" + index).textContent = "";
@@ -44,6 +45,8 @@ window.addEventListener("click", evt => {
 function start() {
   gameInProgress = true;
   document.getElementById("start").disabled = true;
+  document.getElementById("randomize").disabled = false;
+
 }
 
 function checkBingoAlgorithm() {
@@ -122,4 +125,23 @@ function checkBingoAlgorithm() {
     document.getElementById("bingoLabel4").classList.add("cross");
     document.getElementById("bingoLabel5").classList.add("cross");
   }
+}
+
+function randomize(){
+  document.getElementById("randomize").disabled = true;
+
+  for (let index = 1; index <= 25; index++) {
+    let square;
+
+    while(true){
+      square = Math.ceil(Math.random() *25);
+      if(document.getElementById("square" + square).textContent === '' && square > 0 && square < 26){
+        document.getElementById("square" + square).textContent = index;
+        break;
+      }
+    }
+  }
+  document.getElementById("start").disabled = false;
+  document.getElementById("randomize").disabled = true;
+
 }
