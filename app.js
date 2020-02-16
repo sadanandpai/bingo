@@ -45,7 +45,6 @@ window.addEventListener("click", evt => {
 function start() {
   gameInProgress = true;
   document.getElementById("start").disabled = true;
-  document.getElementById("randomize").disabled = false;
 
 }
 
@@ -130,7 +129,7 @@ function checkBingoAlgorithm() {
 function randomize(){
   document.getElementById("randomize").disabled = true;
 
-  for (let index = 1; index <= 25; index++) {
+  for (let index = count; index <= 25; index++) {
     let square;
 
     while(true){
