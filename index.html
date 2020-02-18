@@ -49,6 +49,17 @@
       <div class="inline-block bingo-label" id="bingoLabel5">O</div>
     </div>
 
+    <div style="margin-top: 10px;">
+      <button id="server" onclick="goOnline()">Go online</button><br/>
+      <span id="users"></span>
+    </div>
+
+    <div style="margin-top: 10px;">
+      <span id="winner"></span>
+    </div>
+
+
+    <script type="text/javascript" src="https://paichat.herokuapp.com/socket.io/socket.io.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>

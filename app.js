@@ -21,20 +21,25 @@ function reset() {
   document.getElementById("bingoLabel4").classList.remove("cross");
   document.getElementById("bingoLabel5").classList.remove("cross");
 
+  document.getElementById('winner').innerHTML = "";
+
 }
 
 window.addEventListener("click", evt => {
-  if (
-    evt.srcElement.className.includes("box") &&
-    evt.srcElement.textContent == "" &&
-    !gameInProgress
-  ) {
+  if (evt.srcElement.className.includes("box") && evt.srcElement.textContent == "" && !gameInProgress) {
     evt.srcElement.textContent = count++;
   }
 
   if (evt.srcElement.className.includes("box") && gameInProgress) {
-    evt.srcElement.classList.add("cross");
-    checkBingoAlgorithm();
+    if(socket){
+      evt.srcElement.classList.add("cross");
+      socket.emit('send', { box: evt.srcElement.textContent});
+      checkBingoAlgorithm();
+    }
+    else{
+      evt.srcElement.classList.add("cross");
+      checkBingoAlgorithm();
+    }
   }
 
   if ((count == 26) & !gameInProgress) {
@@ -45,7 +50,6 @@ window.addEventListener("click", evt => {
 function start() {
   gameInProgress = true;
   document.getElementById("start").disabled = true;
-
 }
 
 function checkBingoAlgorithm() {
@@ -67,12 +71,8 @@ function checkBingoAlgorithm() {
     if (
       document.getElementById("square" + i).classList.contains("cross") &&
       document.getElementById("square" + (i + 5)).classList.contains("cross") &&
-      document
-        .getElementById("square" + (i + 10))
-        .classList.contains("cross") &&
-      document
-        .getElementById("square" + (i + 15))
-        .classList.contains("cross") &&
+      document.getElementById("square" + (i + 10)).classList.contains("cross") &&
+      document.getElementById("square" + (i + 15)).classList.contains("cross") &&
       document.getElementById("square" + (i + 20)).classList.contains("cross")
     ) {
       count++;
@@ -99,42 +99,44 @@ function checkBingoAlgorithm() {
     count++;
   }
 
-  if(count == 1){
+  if (count == 1) {
     document.getElementById("bingoLabel1").classList.add("cross");
   }
-  if(count == 2){
+  if (count == 2) {
     document.getElementById("bingoLabel1").classList.add("cross");
     document.getElementById("bingoLabel2").classList.add("cross");
   }
-  if(count == 3){
+  if (count == 3) {
     document.getElementById("bingoLabel1").classList.add("cross");
     document.getElementById("bingoLabel2").classList.add("cross");
     document.getElementById("bingoLabel3").classList.add("cross");
   }
-  if(count == 4){
+  if (count == 4) {
     document.getElementById("bingoLabel1").classList.add("cross");
     document.getElementById("bingoLabel2").classList.add("cross");
     document.getElementById("bingoLabel3").classList.add("cross");
     document.getElementById("bingoLabel4").classList.add("cross");
   }
-  if(count >= 5){
+  if (count >= 5) {
     document.getElementById("bingoLabel1").classList.add("cross");
     document.getElementById("bingoLabel2").classList.add("cross");
     document.getElementById("bingoLabel3").classList.add("cross");
     document.getElementById("bingoLabel4").classList.add("cross");
     document.getElementById("bingoLabel5").classList.add("cross");
+
+    socket.emit('send', { winner: true});
   }
 }
 
-function randomize(){
+function randomize() {
   document.getElementById("randomize").disabled = true;
 
   for (let index = count; index <= 25; index++) {
     let square;
 
-    while(true){
-      square = Math.ceil(Math.random() *25);
-      if(document.getElementById("square" + square).textContent === '' && square > 0 && square < 26){
+    while (true) {
+      square = Math.ceil(Math.random() * 25);
+      if (document.getElementById("square" + square).textContent === "" && square > 0 && square < 26) {
         document.getElementById("square" + square).textContent = index;
         break;
       }
@@ -142,5 +144,38 @@ function randomize(){
   }
   document.getElementById("start").disabled = false;
   document.getElementById("randomize").disabled = true;
+}
 
+var socket;
+var socketId = "";
+
+function goOnline(){
+
+  if(socketId != "")
+    return;
+
+  socket = io.connect("https://paichat.herokuapp.com/");
+
+  socket.emit("ferret", "id", function(data) {
+    socketId = data;
+  });
+  
+  socket.on('message', function(data){
+    if(data.box){
+      for (let index = 1; index < 26; index++) {
+        if(document.getElementById("square" + index).textContent == data.box){
+          document.getElementById("square" + index).classList.add("cross");
+          checkBingoAlgorithm();
+          break;
+        }        
+      }
+    }
+    else if(data.winner){
+      document.getElementById('winner').innerHTML = "Game over";
+    }
+  });
+  
+  socket.on('counter', function(data){
+    document.getElementById('users').innerHTML = data - 1 + " online";
+  });
 }
