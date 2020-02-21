@@ -1,6 +1,7 @@
 navigator.serviceWorker.register("./sw.js");
 
 var count = 1;
+var boxLength = 7;
 var gameInProgress = false;
 document.getElementById("start").disabled = true;
 
@@ -10,9 +11,11 @@ function reset() {
   document.getElementById("start").disabled = true;
   document.getElementById("randomize").disabled = false;
 
-  for (let index = 1; index < 26; index++) {
-    document.getElementById("square" + index).textContent = "";
-    document.getElementById("square" + index).classList.remove("cross");
+  for (let i = 0; i < boxLength; i++) {
+    for (let j = 0; j < boxLength; j++) {
+      document.getElementById("square" + i + j).textContent = "";
+      document.getElementById("square" + i + j).classList.remove("cross");
+    }
   }
 
   document.getElementById("bingoLabel1").classList.remove("cross");
@@ -21,8 +24,7 @@ function reset() {
   document.getElementById("bingoLabel4").classList.remove("cross");
   document.getElementById("bingoLabel5").classList.remove("cross");
 
-  document.getElementById('winner').innerHTML = "";
-
+  document.getElementById("winner").innerHTML = "";
 }
 
 window.addEventListener("click", evt => {
@@ -31,18 +33,17 @@ window.addEventListener("click", evt => {
   }
 
   if (evt.srcElement.className.includes("box") && gameInProgress) {
-    if(socket){
+    if (socket) {
       evt.srcElement.classList.add("cross");
-      socket.emit('send', { box: evt.srcElement.textContent});
+      socket.emit("send", { box: evt.srcElement.textContent });
       checkBingoAlgorithm();
-    }
-    else{
+    } else {
       evt.srcElement.classList.add("cross");
       checkBingoAlgorithm();
     }
   }
 
-  if ((count == 26) & !gameInProgress) {
+  if ((count == boxLength * boxLength + 1) & !gameInProgress) {
     document.getElementById("start").disabled = false;
   }
 });
@@ -53,52 +54,56 @@ function start() {
 }
 
 function checkBingoAlgorithm() {
-  var count = 0;
+  var winCount = 0;
 
-  for (let i = 1; i < 26; i = i + 5) {
-    if (
-      document.getElementById("square" + i).classList.contains("cross") &&
-      document.getElementById("square" + (i + 1)).classList.contains("cross") &&
-      document.getElementById("square" + (i + 2)).classList.contains("cross") &&
-      document.getElementById("square" + (i + 3)).classList.contains("cross") &&
-      document.getElementById("square" + (i + 4)).classList.contains("cross")
-    ) {
-      count++;
+  for (let i = 0; i < boxLength; i++) {
+    let count = 0;
+    for (let j = 0; j < boxLength; j++) {
+      if(document.getElementById("square" + i + j).classList.contains("cross"))
+        count++;
+    }
+
+    if(count === boxLength){
+      winCount++;
     }
   }
 
-  for (let i = 1; i < 6; i++) {
-    if (
-      document.getElementById("square" + i).classList.contains("cross") &&
-      document.getElementById("square" + (i + 5)).classList.contains("cross") &&
-      document.getElementById("square" + (i + 10)).classList.contains("cross") &&
-      document.getElementById("square" + (i + 15)).classList.contains("cross") &&
-      document.getElementById("square" + (i + 20)).classList.contains("cross")
-    ) {
-      count++;
+  for (let i = 0; i < boxLength; i++) {
+    let count = 0;
+    for (let j = 0; j < boxLength; j++) {
+      if(document.getElementById("square" + j + i).classList.contains("cross"))
+        count++;
+    }
+
+    if(count === boxLength){
+      winCount++;
     }
   }
 
-  if (
-    document.getElementById("square1").classList.contains("cross") &&
-    document.getElementById("square7").classList.contains("cross") &&
-    document.getElementById("square13").classList.contains("cross") &&
-    document.getElementById("square19").classList.contains("cross") &&
-    document.getElementById("square25").classList.contains("cross")
-  ) {
-    count++;
+  let count = 0;
+  for (let i = 0; i < boxLength; i++) {
+    if(document.getElementById("square" + i + i).classList.contains("cross"))
+        count++;
   }
 
-  if (
-    document.getElementById("square5").classList.contains("cross") &&
-    document.getElementById("square9").classList.contains("cross") &&
-    document.getElementById("square13").classList.contains("cross") &&
-    document.getElementById("square17").classList.contains("cross") &&
-    document.getElementById("square21").classList.contains("cross")
-  ) {
-    count++;
+  if(count == boxLength){
+    winCount++;
   }
 
+  count = 0;
+  for (let i = 0; i < boxLength; i++) {
+    if(document.getElementById("square" + i + (boxLength - i - 1)).classList.contains("cross"))
+        count++;
+  }
+
+  if(count == boxLength){
+    winCount++;
+  }
+
+  bingoMarker(winCount);
+}
+
+function bingoMarker(count){
   if (count == 1) {
     document.getElementById("bingoLabel1").classList.add("cross");
   }
@@ -124,20 +129,23 @@ function checkBingoAlgorithm() {
     document.getElementById("bingoLabel4").classList.add("cross");
     document.getElementById("bingoLabel5").classList.add("cross");
 
-    socket.emit('send', { winner: true});
+    if(socket)
+      socket.emit("send", { winner: true });
   }
 }
+
 
 function randomize() {
   document.getElementById("randomize").disabled = true;
 
-  for (let index = count; index <= 25; index++) {
-    let square;
+  for (let index = count; index <= boxLength * boxLength; index++) {
+    let i, j;
 
     while (true) {
-      square = Math.ceil(Math.random() * 25);
-      if (document.getElementById("square" + square).textContent === "" && square > 0 && square < 26) {
-        document.getElementById("square" + square).textContent = index;
+      i = Math.floor(Math.random() * boxLength);
+      j = Math.floor(Math.random() * boxLength);
+      if (document.getElementById("square" + i + j).textContent === "" && i >= 0 && i < boxLength && j >= 0 && j < boxLength) {
+        document.getElementById("square" + i + j).textContent = index;
         break;
       }
     }
@@ -149,33 +157,32 @@ function randomize() {
 var socket;
 var socketId = "";
 
-function goOnline(){
-
-  if(socketId != "")
-    return;
+function goOnline() {
+  if (socketId != "") return;
 
   socket = io.connect("https://paichat.herokuapp.com/");
 
   socket.emit("ferret", "id", function(data) {
     socketId = data;
   });
-  
-  socket.on('message', function(data){
-    if(data.box){
-      for (let index = 1; index < 26; index++) {
-        if(document.getElementById("square" + index).textContent == data.box){
-          document.getElementById("square" + index).classList.add("cross");
-          checkBingoAlgorithm();
-          break;
-        }        
+
+  socket.on("message", function(data) {
+    if (data.box) {
+      for (let i = 0; i < boxLength; i++) {
+        for (let j = 0; j < boxLength; j++) {
+          if (document.getElementById("square" + i + j).textContent == data.box) {
+            document.getElementById("square" + i + j).classList.add("cross");
+            checkBingoAlgorithm();
+            break;
+          }
+        }
       }
-    }
-    else if(data.winner){
-      document.getElementById('winner').innerHTML = "Game over";
+    } else if (data.winner) {
+      document.getElementById("winner").innerHTML = "Game over";
     }
   });
-  
-  socket.on('counter', function(data){
-    document.getElementById('users').innerHTML = data - 1 + " online";
+
+  socket.on("counter", function(data) {
+    document.getElementById("users").innerHTML = data - 1 + " online";
   });
 }
