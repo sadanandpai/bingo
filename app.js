@@ -171,7 +171,7 @@ function goOnline() {
           if (document.getElementById("square" + i + j).textContent == data.box) {
             document.getElementById("square" + i + j).classList.add("cross");
             document.getElementById("square" + i + j).classList.add("yellow");
-            setTimeout(()=>{ document.getElementById("square" + i + j).remove('yellow'); }, 1000);
+            setTimeout(()=>{ document.getElementById("square" + i + j).classList.remove('yellow'); }, 1000);
             checkBingoAlgorithm();
             break;
           }
