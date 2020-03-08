@@ -1,7 +1,7 @@
 navigator.serviceWorker.register("./sw.js");
 
 var count = 1;
-var boxLength = 7;
+var boxLength = 5;
 var gameInProgress = false;
 document.getElementById("start").disabled = true;
 
@@ -34,13 +34,15 @@ window.addEventListener("click", evt => {
 
   if (evt.srcElement.className.includes("box") && gameInProgress) {
     if (socket) {
-      evt.srcElement.classList.add("cross");
       socket.emit("send", { box: evt.srcElement.textContent });
-      checkBingoAlgorithm();
-    } else {
-      evt.srcElement.classList.add("cross");
-      checkBingoAlgorithm();
-    }
+    } 
+
+    evt.srcElement.classList.add("cross");
+    evt.srcElement.classList.add("yellow");
+
+    checkBingoAlgorithm();
+
+    setTimeout(()=>{ evt.srcElement.classList.remove('yellow'); }, 1000)
   }
 
   if ((count == boxLength * boxLength + 1) & !gameInProgress) {
