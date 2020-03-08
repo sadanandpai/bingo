@@ -38,11 +38,7 @@ window.addEventListener("click", evt => {
     } 
 
     evt.srcElement.classList.add("cross");
-    evt.srcElement.classList.add("yellow");
-
     checkBingoAlgorithm();
-
-    setTimeout(()=>{ evt.srcElement.classList.remove('yellow'); }, 1000)
   }
 
   if ((count == boxLength * boxLength + 1) & !gameInProgress) {
@@ -174,6 +170,8 @@ function goOnline() {
         for (let j = 0; j < boxLength; j++) {
           if (document.getElementById("square" + i + j).textContent == data.box) {
             document.getElementById("square" + i + j).classList.add("cross");
+            document.getElementById("square" + i + j).classList.add("yellow");
+            setTimeout(()=>{ document.getElementById("square" + i + j).remove('yellow'); }, 1000);
             checkBingoAlgorithm();
             break;
           }
